@@ -50,7 +50,7 @@ calculate percentiles of original data using bin-related weight
 percentiles of simulated data with corresponding confidence interval
 }
 \examples{
-asVPC.binW(orig.data,sim.data,n.timebin=4, n.sim=100,n.hist=2)
+asVPC.binW(orig.data,sim.data,n.timebin=10, n.sim=50,n.hist=3)
 }
 \author{
 Eun-Kyung Lee \email{lee.eunk@gmail.com}

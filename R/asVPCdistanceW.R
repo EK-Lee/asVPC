@@ -1,4 +1,4 @@
-#' calculate percentiles of original data using bin-related weight 
+#' calculate percentiles of original data using distance-related weight 
 #' percentiles of simulated data with corresponding confidence interval
 #'
 #' @param orig.data the original data for model fitting
@@ -19,26 +19,26 @@
 #' @param plot.flag option to draw plot/return values to draw plot
 #' @return plot or the values to draw plot
 #' @export
-#' @seealso \code{\link{asVPC.distanceW}}
+#' @seealso \code{\link{asVPC.binW}}
 #' @references new paper...
 #' @author Eun-Kyung Lee \email{lee.eunk@@gmail.com}
 #' @examples
-#' asVPC.binW(orig.data,sim.data,n.timebin=4, n.sim=100,n.hist=2)
-
-asVPC.binW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
-                     q.list=c(0.05,0.5,0.95),
-                     conf.level=0.95,
-                     X.name="TIME",Y.name="DV",
-                     opt.DV.point=FALSE,
-                     weight.flag=FALSE,
-                     Y.min=NULL,
-                     Y.max=NULL,
-                     only.med=FALSE,
-                     orig.ASH=TRUE,
-                     plot.flag=TRUE)
+#' asVPC.distanceW(orig.data,sim.data,n.timebin=10, n.sim=50,n.hist=3)
+    
+asVPC.distanceW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
+                          q.list=c(0.05,0.5,0.95),
+                          conf.level=0.95,
+                          X.name="TIME",Y.name="DV",
+                          opt.DV.point=FALSE,
+                          weight.flag=FALSE,
+                          Y.min=NULL,
+                          Y.max=NULL,
+                          only.med=FALSE,
+                          orig.ASH=TRUE,
+                          plot.flag=TRUE)
 {    bintot.N<-n.timebin*n.hist
      time.bin<-makeCOVbin(orig.data[,X.name],N.covbin=bintot.N)
-     alpha<-1-conf.level   
+     alpha<-1-conf.level     
      Q.CI<-vector("list", 3)
      orig.Q<-NULL
      bintot.N<-nrow(time.bin$COV.bin.summary)
@@ -63,11 +63,15 @@ asVPC.binW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
           low.point<-time.bin$COV.bin.summary$lower.COV[i]
           upper.point<-time.bin$COV.bin.summary$upper.COV[i]
         }   
-
-        A<-as.numeric(time.bin$COV.bin[sel.id])
-        temp<-abs(A-as.numeric(time.bin$COV.bin[sel.id1[1]]))
-        temp.weight<-(max(temp)+1)-temp
-        temp.weight<-temp.weight/max(temp.weight)
+        if(bintot.N<length(table(orig.data$TIME)))
+        {   dist.temp<-abs(orig.data$TIME[sel.id]-mid.point)
+            temp.weight<-(max(dist.temp)-dist.temp)/diff(range(dist.temp))
+        } else
+        {   A<-as.numeric(time.bin$COV.bin[sel.id])
+            temp<-abs(A-median(range(A)))
+            temp.weight<-(max(temp)+1)-temp
+            temp.weight<-temp.weight/max(temp.weight)
+        }
 
         if(weight.flag)
         {   temp.quantile<-t(apply(sim.data[sel.id,],2,function(x) 
@@ -102,7 +106,6 @@ asVPC.binW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
 
      P.temp<-ggplot(plot.data,aes(x=X,y=Y))+ ylim(Y.min, Y.max) + labs(x=X.name,y=Y.name) 
 
-
      test.LU<-Q.CI[[1]][,2:3]
      test.data.tot<-Q.CI
      X.temp<-c(test.LU[,1],test.LU[nrow(test.LU),2])
@@ -127,6 +130,7 @@ asVPC.binW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
      {  P.temp<-P.temp+geom_point(,color="grey30",size=1) 
      }
      
+     # DV.quantile (default)
      P.temp<-P.temp+geom_line(data= orig.Q,aes(x=mid,y=Y1),linetype=2,size=1,color="blue")+
                     geom_line(data= orig.Q,aes(x=mid,y=Y2),linetype=1,size=1,color="blue")+
                     geom_line(data= orig.Q,aes(x=mid,y=Y3),linetype=2,size=1,color="blue")
