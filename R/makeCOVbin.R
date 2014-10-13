@@ -37,7 +37,7 @@
     { breaks.data[length(breaks.data)]<-range.temp[2]+(range.temp[2]-range.temp[1])*0.1      
     }
     cut.temp <- cut(COV.data, breaks=breaks.data) 
-    tab <- ddply(data.temp, .(cut.temp), summarize, mid.COV=round(mean(COV.data, na.rm=T),2),.drop=FALSE)
+    tab <- plyr::ddply(data.temp, .(cut.temp), summarize, mid.COV=round(mean(COV.data, na.rm=T),2),.drop=FALSE)
         
   } else
   {  if(N.covbin<length(table(COV.data)))
@@ -51,13 +51,13 @@
           cutpoints<-cutpoints[-temp.id]
           cut.temp<-cut(COV.data,cutpoints,include.lowest=TRUE)
         }
-        tab <- ddply(data.temp, .(cut.temp), summarize, med.COV=round(median(COV.data, na.rm=T),2),.drop=FALSE)
+        tab <- plyr::ddply(data.temp, .(cut.temp), summarize, med.COV=round(median(COV.data, na.rm=T),2),.drop=FALSE)
      } else
      {  cut.temp.id<-as.numeric(names(table(COV.data)))
         cut.temp.id[1]<-cut.temp.id[1]-0.1
         cut.temp.id[length(cut.temp.id)]<-cut.temp.id[length(cut.temp.id)]+0.1
         cut.temp<-cut(COV.data,cut.temp.id)     
-        tab <- ddply(data.temp, .(cut.temp), summarize, med.COV=round(median(COV.data, na.rm=T),2),.drop=FALSE)      
+        tab <- plyr::ddply(data.temp, .(cut.temp), summarize, med.COV=round(median(COV.data, na.rm=T),2),.drop=FALSE)      
      }
   } 
   LU.temp<-find.LU(tab[,1])

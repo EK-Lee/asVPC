@@ -41,7 +41,7 @@ asVPC.distanceW(orig.data, sim.data, n.timebin, n.sim, n.hist,
 
 \item{orig.ASH}{option to use average shifted in percentile of original data}
 
-\item{plot.flag}{option to draw plot/return values to draw plot}
+\item{plot.flag}{TRUE: drawing plot / FALSE: generate data for drawing plot}
 }
 \value{
 plot or the values to draw plot

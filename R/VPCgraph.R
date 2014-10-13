@@ -15,6 +15,8 @@
 #' @param opt.SIM.quantile.CI.area opeions for drawing confidence area of quantiles for simulated data
 #' @param Y.min minimum of y axis in VPC plot
 #' @param Y.max maximum of y axis in VPC plot
+#' @param plot.flag TRUE: drawing plot / FALSE: generate data for drawing plot
+#' @return plot or the values to draw plot
 #' @export
 #' @references new paper...
 #' @author Eun-Kyung Lee \email{lee.eunk@@gmail.com}
@@ -29,8 +31,13 @@ VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
                     opt.DV.quantile.line=TRUE,
                     opt.SIM.quantile.line=FALSE,
                     opt.SIM.quantile.CI.area=TRUE,
-                    Y.min=NULL,Y.max=NULL)
-{   
+                    Y.min=NULL,Y.max=NULL,plot.flag=TRUE)
+{ SIM.CIarea.1 <- NULL
+  SIM.CIarea.2 <- NULL
+  SIM.CIarea.3 <- NULL
+  DV.point <- NULL
+  DV.quant <- NULL
+  SIM.quant <- NULL 
   
   
   findQuantile<-function(DV.data,TIME.data,time.bin.temp,q)
@@ -85,38 +92,44 @@ VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
         X<-c(X,X[length(X):1])
         test.data<-test.data.tot[[1]]
         Y<-c(rep(test.data[,2],each=2),rep(test.data[(n.temp:1),4],each=2))
-        plotdata2<-data.frame(X=X,Y=Y,ID=1)
-        (P.temp<-P.temp+geom_polygon(data= plotdata2,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue"))
+        SIM.CIarea.1<-data.frame(X=X,Y=Y,ID=1)
+        (P.temp<-P.temp+geom_polygon(data= SIM.CIarea.1,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue"))
         test.data<-test.data.tot[[3]]
         Y<-c(rep(test.data[,2],each=2),rep(test.data[(n.temp:1),4],each=2))
-        plotdata2<-data.frame(X=X,Y=Y,ID=1)
-        (P.temp<-P.temp+geom_polygon(data= plotdata2,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue"))
+        SIM.CIarea.3<-data.frame(X=X,Y=Y,ID=1)
+        (P.temp<-P.temp+geom_polygon(data= SIM.CIarea.3,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue"))
         test.data<-test.data.tot[[2]]
         Y<-c(rep(test.data[,2],each=2),rep(test.data[(n.temp:1),4],each=2))
-        plotdata2<-data.frame(X=X,Y=Y,ID=1)
-        (P.temp<-P.temp+geom_polygon(data= plotdata2,aes(x=X,y=Y,group=ID,fill=ID),fill="pink",colour="pink")  )
+        SIM.CIarea.2<-data.frame(X=X,Y=Y,ID=1)
+        (P.temp<-P.temp+geom_polygon(data= SIM.CIarea.2,aes(x=X,y=Y,group=ID,fill=ID),fill="pink",colour="pink")  )
      } 
 
      if(opt.DV.point)
-     {  (P.temp<-P.temp+geom_point(,color="grey30",size=1.5)  )
+     {  (P.temp<-P.temp+geom_point(,color="grey30"))#,size=1.5)  )
+        DV.point<-data.frame(X=orig.data[,X.name],Y=orig.data[,Y.name])
      } 
 
      if(opt.DV.quantile.line)
      {  temp<-findQuantile(plot.data$Y,plot.data$X,time.bin,q=q.list)
-        plotdata1<-data.frame(X=rep(temp$med.COV,length(q.list)),
+        DV.quant<-data.frame(X=rep(temp$med.COV,length(q.list)),
                             G=factor(rep(paste("Q",round(q.list*100),"th",sep=""),each=nrow(temp))),
                             Y=unlist(temp[,-(1:(ncol(temp)-length(q.list)))]))
-        (P.temp<-P.temp+geom_line(data = plotdata1[plotdata1$G!="Q50th",],aes(x=X,y=Y,group=G),linetype=2,size=1,color="blue")+
-           geom_line(data = plotdata1[plotdata1$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="blue") )
+        (P.temp<-P.temp+geom_line(data = DV.quant[DV.quant$G!="Q50th",],aes(x=X,y=Y,group=G),linetype=2,size=1,color="blue")+
+           geom_line(data = DV.quant[DV.quant$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="blue") )
      } 
  
      if(opt.SIM.quantile.line)
      {  temp.sim.Q<-findQuantile(sim.data,plot.data$X,time.bin,q=q.list)
-        plotdata2<-data.frame(X=rep(temp.sim.Q$med.COV,length(q)),
+        SIM.quant<-data.frame(X=rep(temp.sim.Q$med.COV,length(q)),
                             G=factor(rep(paste("Q",round(q.list*100),"th",sep=""),each=nrow(temp.sim.Q))),
                             Y=unlist(temp.sim.Q[,-(1:(ncol(temp.sim.Q)-length(q.list)))]))
-        (P.temp<-P.temp+geom_line(data = plotdata2[plotdata2$G!="Q50th",],aes(x=X,y=Y,group=G),linetype=2,size=1,color="red")+
-          geom_line(data = plotdata2[plotdata2$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="red"))
+        (P.temp<-P.temp+geom_line(data = SIM.quant[SIM.quant$G!="Q50th",],aes(x=X,y=Y,group=G),linetype=2,size=1,color="red")+
+          geom_line(data = SIM.quant[SIM.quant$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="red"))
      }
-     P.temp
+  if(plot.flag)
+  {  P.temp
+  } else
+  { return(list(SIM.CIarea.1 = SIM.CIarea.1, SIM.CIarea.2 = SIM.CIarea.2, SIM.CIarea.3 = SIM.CIarea.3,
+                DV.point = DV.point, DV.quant = DV.quant, SIM.quant = SIM.quant))
+  }
 }   

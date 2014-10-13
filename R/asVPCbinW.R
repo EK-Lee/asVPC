@@ -16,7 +16,7 @@
 #' @param Y.max maximum of Y range in the plot
 #' @param only.med option to use only median 
 #' @param orig.ASH option to use average shifted in percentile of original data
-#' @param plot.flag option to draw plot/return values to draw plot
+#' @param plot.flag TRUE: drawing plot / FALSE: generate data for drawing plot
 #' @return plot or the values to draw plot
 #' @export
 #' @seealso \code{\link{asVPC.distanceW}}
@@ -36,7 +36,14 @@ asVPC.binW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
                      only.med=FALSE,
                      orig.ASH=TRUE,
                      plot.flag=TRUE)
-{    bintot.N<-n.timebin*n.hist
+{    SIM.CIarea.1 <- NULL
+     SIM.CIarea.2 <- NULL
+     SIM.CIarea.3 <- NULL
+     DV.point <- NULL
+     DV.quant <- NULL
+     SIM.quant <- NULL  
+   
+     bintot.N<-n.timebin*n.hist
      time.bin<-makeCOVbin(orig.data[,X.name],N.covbin=bintot.N)
      alpha<-1-conf.level   
      Q.CI<-vector("list", 3)
@@ -112,28 +119,32 @@ asVPC.binW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
      if(!only.med)
      {  test.data<-test.data.tot[[1]]
         Y<-c(rep(test.data[,4],each=2),rep(test.data[(n.temp:1),6],each=2))
-        plotdata2<-data.frame(X=X,Y=Y,ID=1)
-        P.temp<-P.temp+geom_polygon(data= plotdata2,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue")
+        SIM.CIarea.1<-data.frame(X=X,Y=Y,ID=1)
+        P.temp<-P.temp+geom_polygon(data= SIM.CIarea.1,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue")
         test.data<-test.data.tot[[3]]
         Y<-c(rep(test.data[,4],each=2),rep(test.data[(n.temp:1),6],each=2))
-        plotdata2<-data.frame(X=X,Y=Y,ID=1)
-        P.temp<-P.temp+geom_polygon(data= plotdata2,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue")
+        SIM.CIarea.3<-data.frame(X=X,Y=Y,ID=1)
+        P.temp<-P.temp+geom_polygon(data= SIM.CIarea.3,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue")
      }
      test.data<-test.data.tot[[2]]
      Y<-c(rep(test.data[,4],each=2),rep(test.data[(n.temp:1),6],each=2))
-     plotdata2<-data.frame(X=X,Y=Y,ID=1)
-     P.temp<-P.temp+geom_polygon(data= plotdata2,aes(x=X,y=Y,group=ID,fill=ID),fill="pink",colour="pink")  
+    SIM.CIarea.2<-data.frame(X=X,Y=Y,ID=1)
+     P.temp<-P.temp+geom_polygon(data= SIM.CIarea.2,aes(x=X,y=Y,group=ID,fill=ID),fill="pink",colour="pink")  
      if(opt.DV.point==TRUE)
      {  P.temp<-P.temp+geom_point(,color="grey30",size=1) 
+        DV.point <- data.frame(X=orig.data[,X.name],Y=orig.data[,Y.name])
      }
-     
-     P.temp<-P.temp+geom_line(data= orig.Q,aes(x=mid,y=Y1),linetype=2,size=1,color="blue")+
-                    geom_line(data= orig.Q,aes(x=mid,y=Y2),linetype=1,size=1,color="blue")+
-                    geom_line(data= orig.Q,aes(x=mid,y=Y3),linetype=2,size=1,color="blue")
+     DV.quant<-data.frame(X=rep(orig.Q$mid,length(q.list)),
+                         G=factor(rep(paste("Q",round(q.list*100),"th",sep=""),each=nrow(orig.Q))),
+                         Y=unlist(orig.Q[,-1]))
+    (P.temp<-P.temp+geom_line(data = DV.quant[DV.quant$G!="Q50th",],aes(x=X,y=Y,group=G),linetype=2,size=1,color="blue")+
+       geom_line(data = DV.quant[DV.quant$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="blue") )
+ 
      colnames(orig.Q)<-c("X.mid",paste("Q",round(q.list*100),"th",sep="") ) 
      if(plot.flag)
      {  P.temp
      } else
-     { list(orig.Quantile=orig.Q,sim.quantile=Q.CI)
+     { return(list(SIM.CIarea.1 = SIM.CIarea.1, SIM.CIarea.2 = SIM.CIarea.2, SIM.CIarea.3 = SIM.CIarea.3,
+                              DV.point = DV.point, DV.quant = DV.quant, SIM.quant = SIM.quant))
      }
 }

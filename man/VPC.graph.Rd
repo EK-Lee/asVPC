@@ -7,7 +7,8 @@ percentiles of simulated data with corresponding confidence interval}
 VPC.graph(orig.data, sim.data, N.timebin, N.sim, q.list = c(0.05, 0.5, 0.95),
   alpha = 0.05, X.name = "TIME", Y.name = "DV", opt.DV.point = FALSE,
   opt.DV.quantile.line = TRUE, opt.SIM.quantile.line = FALSE,
-  opt.SIM.quantile.CI.area = TRUE, Y.min = NULL, Y.max = NULL)
+  opt.SIM.quantile.CI.area = TRUE, Y.min = NULL, Y.max = NULL,
+  plot.flag = TRUE)
 }
 \arguments{
 \item{orig.data}{NONMEM data}
@@ -36,7 +37,12 @@ VPC.graph(orig.data, sim.data, N.timebin, N.sim, q.list = c(0.05, 0.5, 0.95),
 
 \item{Y.max}{}
 
+\item{plot.flag}{TRUE: drawing plot / FALSE: generate data for drawing plot}
+
 \item{Y.max}{maximum of y axis in VPC plot}
+}
+\value{
+plot or the values to draw plot
 }
 \description{
 calculate percentiles of original data using bin-related weight
