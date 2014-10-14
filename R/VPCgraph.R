@@ -105,7 +105,7 @@ VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
      } 
 
      if(opt.DV.point)
-     {  (P.temp<-P.temp+geom_point(,color="grey30"))#,size=1.5)  )
+     {  (P.temp<-P.temp+geom_point(,color="grey30",size=1.5))  
         DV.point<-data.frame(X=orig.data[,X.name],Y=orig.data[,Y.name])
      } 
 
