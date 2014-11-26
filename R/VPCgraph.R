@@ -81,7 +81,7 @@ VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
      if(is.null(Y.min)) Y.min<-min(plot.data$Y,na.rm=T)
      if(is.null(Y.max)) Y.max<-max(plot.data$Y,na.rm=T)
 
-     P.temp<-ggplot(plot.data,aes(x=X,y=Y))+ ylim(Y.min, Y.max) + labs(x=X.name,y=Y.name) 
+     P.temp<-ggplot2::ggplot(plot.data,aes(x=X,y=Y))+ ylim(Y.min, Y.max) + labs(x=X.name,y=Y.name) 
      if(opt.SIM.quantile.CI.area)
      {  temp.simCI<-findQuantileCI(sim.data,plot.data$X,time.bin,q=q.list,alpha=alpha,N.sim)
         test.LU<-temp.simCI$TIME.bin.summary[,4:5]
@@ -105,7 +105,7 @@ VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
      } 
 
      if(opt.DV.point)
-     {  (P.temp<-P.temp+geom_point(,color="grey30",size=1.5))  
+     {  (P.temp<-P.temp+geom_point(,color="grey30",size=2,alpha=0.5)) 
         DV.point<-data.frame(X=orig.data[,X.name],Y=orig.data[,Y.name])
      } 
 
@@ -127,7 +127,9 @@ VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
           geom_line(data = SIM.quant[SIM.quant$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="red"))
      }
   if(plot.flag)
-  {  P.temp
+  {  P.temp +
+       theme_bw() + theme(panel.grid.major=element_line(colour = "white")) +
+       theme(panel.grid.minor=element_line(colour = "white"))
   } else
   { return(list(SIM.CIarea.1 = SIM.CIarea.1, SIM.CIarea.2 = SIM.CIarea.2, SIM.CIarea.3 = SIM.CIarea.3,
                 DV.point = DV.point, DV.quant = DV.quant, SIM.quant = SIM.quant))

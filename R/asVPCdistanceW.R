@@ -15,7 +15,6 @@
 #' @param Y.min minimum of Y range in the plot
 #' @param Y.max maximum of Y range in the plot
 #' @param only.med option to use only median 
-#' @param orig.ASH option to use average shifted in percentile of original data
 #' @param plot.flag TRUE: drawing plot / FALSE: generate data for drawing plot
 #' @return plot or the values to draw plot
 #' @export
@@ -34,7 +33,6 @@ asVPC.distanceW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
                           Y.min=NULL,
                           Y.max=NULL,
                           only.med=FALSE,
-                          orig.ASH=TRUE,
                           plot.flag=TRUE)
 {    SIM.CIarea.1 <- NULL
      SIM.CIarea.2 <- NULL
@@ -81,8 +79,8 @@ asVPC.distanceW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
 
         if(weight.flag)
         {   temp.quantile<-t(apply(sim.data[sel.id,],2,function(x) 
-                                    wtd.quantile(x,weight=temp.weight,prob=q.list,na.rm=TRUE)))
-            temp.orig.q<-wtd.quantile(orig.data[,Y.name][sel.id],weight=temp.weight,prob=q.list,na.rm=TRUE)
+                            Hmisc::wtd.quantile(x,weight=temp.weight,prob=q.list,na.rm=TRUE)))
+            temp.orig.q<-Hmisc::wtd.quantile(orig.data[,Y.name][sel.id],weight=temp.weight,prob=q.list,na.rm=TRUE)
         } else
         {   temp.quantile<-t(apply(sim.data[sel.id,],2,function(x) quantile(x,prob=q.list,na.rm=TRUE)))
             temp.orig.q<-quantile(orig.data[,Y.name][sel.id],prob=q.list,na.rm=TRUE)
@@ -92,11 +90,6 @@ asVPC.distanceW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
         for(j in 1:length(q.list))
             Q.CI[[j]]<-rbind(Q.CI[[j]],c(mid.point,low.point,upper.point,temp[j,]))
      } 
-    if(!orig.ASH)
-    { time.bin<-makeCOVbin(orig.data[,X.name],N.covbin=n.timebin)
-      temp<-findQuantile(orig.data[,Y.name],orig.data[,X.name],time.bin,q=q.list)
-      orig.Q<-temp[,c(2,6:8)]
-    }
      keep.name<-NULL
      for(j in 1:length(q.list))
      {   keep.name<-c(keep.name,paste("Q",round(q.list[j]*100),"th",sep=""))
@@ -110,7 +103,9 @@ asVPC.distanceW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
      if(is.null(Y.min)) Y.min<-min(c(plot.data$Y,Q.CI[[1]][,4]),na.rm=T)
      if(is.null(Y.max)) Y.max<-max(c(plot.data$Y,Q.CI[[length(Q.CI)]][,6]),na.rm=T)
 
-     P.temp<-ggplot(plot.data,aes(x=X,y=Y))+ ylim(Y.min, Y.max) + labs(x=X.name,y=Y.name) 
+     P.temp<-ggplot2::ggplot(plot.data,aes(x=X,y=Y))+ ylim(Y.min, Y.max) + labs(x=X.name,y=Y.name) +
+      theme_bw() + theme(panel.grid.major=element_line(colour = "white")) +
+      theme(panel.grid.minor=element_line(colour = "white"))
 
      test.LU<-Q.CI[[1]][,2:3]
      test.data.tot<-Q.CI
@@ -133,7 +128,7 @@ asVPC.distanceW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
      SIM.CIarea.2<-data.frame(X=X,Y=Y,ID=1)
      P.temp<-P.temp+geom_polygon(data= SIM.CIarea.2,aes(x=X,y=Y,group=ID,fill=ID),fill="pink",colour="pink")  
      if(opt.DV.point==TRUE)
-     {  P.temp<-P.temp+geom_point(,color="grey30",size=1) 
+     {  P.temp<-P.temp+geom_point(,color="grey30",size=2,alpha=0.5) 
         DV.point <- data.frame(X=orig.data[,X.name],Y=orig.data[,Y.name])
      }
      
