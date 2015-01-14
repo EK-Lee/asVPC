@@ -10,6 +10,7 @@
 #' @param alpha significance level of CI for each quantile
 #' @param X.name x label in VPC plot
 #' @param Y.name y label in VPC plot
+#' @param main.title title of plot
 #' @param opt.DV.point option for drawing data points
 #' @param opt.SIM.quantile.line option for drawing quantiles of simulated data
 #' @param opt.SIM.quantile.CI.area opeions for drawing confidence area of quantiles for simulated data
@@ -26,7 +27,7 @@
 VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
                     q.list=c(0.05,0.5,0.95),
                     alpha=0.05,
-                    X.name="TIME",Y.name="DV",
+                    X.name="TIME",Y.name="DV", main.title=NULL,
                     opt.DV.point=FALSE,
                     opt.DV.quantile.line=TRUE,
                     opt.SIM.quantile.line=FALSE,
@@ -81,7 +82,7 @@ VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
      if(is.null(Y.min)) Y.min<-min(plot.data$Y,na.rm=T)
      if(is.null(Y.max)) Y.max<-max(plot.data$Y,na.rm=T)
 
-     P.temp<-ggplot2::ggplot(plot.data,aes(x=X,y=Y))+ ylim(Y.min, Y.max) + labs(x=X.name,y=Y.name) 
+     P.temp<-ggplot2::ggplot(plot.data,aes(x=X,y=Y))+ ylim(Y.min, Y.max) + labs(x=X.name,y=Y.name,title=main.title)
      if(opt.SIM.quantile.CI.area)
      {  temp.simCI<-findQuantileCI(sim.data,plot.data$X,time.bin,q=q.list,alpha=alpha,N.sim)
         test.LU<-temp.simCI$TIME.bin.summary[,4:5]
@@ -93,15 +94,15 @@ VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
         test.data<-test.data.tot[[1]]
         Y<-c(rep(test.data[,2],each=2),rep(test.data[(n.temp:1),4],each=2))
         SIM.CIarea.1<-data.frame(X=X,Y=Y,ID=1)
-        (P.temp<-P.temp+geom_polygon(data= SIM.CIarea.1,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue"))
+        (P.temp<-P.temp+geom_polygon(data= SIM.CIarea.1,aes(x=X,y=Y,group=ID,fill=ID),fill="gray80",colour="gray80"))
         test.data<-test.data.tot[[3]]
         Y<-c(rep(test.data[,2],each=2),rep(test.data[(n.temp:1),4],each=2))
         SIM.CIarea.3<-data.frame(X=X,Y=Y,ID=1)
-        (P.temp<-P.temp+geom_polygon(data= SIM.CIarea.3,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue"))
+        (P.temp<-P.temp+geom_polygon(data= SIM.CIarea.3,aes(x=X,y=Y,group=ID,fill=ID),fill="gray80",colour="gray80"))
         test.data<-test.data.tot[[2]]
         Y<-c(rep(test.data[,2],each=2),rep(test.data[(n.temp:1),4],each=2))
         SIM.CIarea.2<-data.frame(X=X,Y=Y,ID=1)
-        (P.temp<-P.temp+geom_polygon(data= SIM.CIarea.2,aes(x=X,y=Y,group=ID,fill=ID),fill="pink",colour="pink")  )
+        (P.temp<-P.temp+geom_polygon(data= SIM.CIarea.2,aes(x=X,y=Y,group=ID,fill=ID),fill="gray50",colour="gray50")  )
      } 
 
      if(opt.DV.point)
@@ -114,8 +115,8 @@ VPC.graph<-function(orig.data,sim.data,N.timebin,N.sim,
         DV.quant<-data.frame(X=rep(temp$med.COV,length(q.list)),
                             G=factor(rep(paste("Q",round(q.list*100),"th",sep=""),each=nrow(temp))),
                             Y=unlist(temp[,-(1:(ncol(temp)-length(q.list)))]))
-        (P.temp<-P.temp+geom_line(data = DV.quant[DV.quant$G!="Q50th",],aes(x=X,y=Y,group=G),linetype=2,size=1,color="blue")+
-           geom_line(data = DV.quant[DV.quant$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="blue") )
+        (P.temp<-P.temp+geom_line(data = DV.quant[DV.quant$G!="Q50th",],aes(x=X,y=Y,group=G),linetype=2,size=1,color="black")+
+           geom_line(data = DV.quant[DV.quant$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="black") )
      } 
  
      if(opt.SIM.quantile.line)

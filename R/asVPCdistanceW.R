@@ -117,16 +117,16 @@ asVPC.distanceW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
      {  test.data<-test.data.tot[[1]]
         Y<-c(rep(test.data[,4],each=2),rep(test.data[(n.temp:1),6],each=2))
         SIM.CIarea.1<-data.frame(X=X,Y=Y,ID=1)
-        P.temp<-P.temp+geom_polygon(data= SIM.CIarea.1,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue")
+        P.temp<-P.temp+geom_polygon(data= SIM.CIarea.1,aes(x=X,y=Y,group=ID,fill=ID),fill="gray80",colour="gray80")
         test.data<-test.data.tot[[3]]
         Y<-c(rep(test.data[,4],each=2),rep(test.data[(n.temp:1),6],each=2))
         SIM.CIarea.3<-data.frame(X=X,Y=Y,ID=1)
-        P.temp<-P.temp+geom_polygon(data= SIM.CIarea.3,aes(x=X,y=Y,group=ID,fill=ID),fill="light blue",colour="light blue")
+        P.temp<-P.temp+geom_polygon(data= SIM.CIarea.3,aes(x=X,y=Y,group=ID,fill=ID),fill="gray80",colour="gray80")
      }
      test.data<-test.data.tot[[2]]
      Y<-c(rep(test.data[,4],each=2),rep(test.data[(n.temp:1),6],each=2))
      SIM.CIarea.2<-data.frame(X=X,Y=Y,ID=1)
-     P.temp<-P.temp+geom_polygon(data= SIM.CIarea.2,aes(x=X,y=Y,group=ID,fill=ID),fill="pink",colour="pink")  
+     P.temp<-P.temp+geom_polygon(data= SIM.CIarea.2,aes(x=X,y=Y,group=ID,fill=ID),fill="gray50",colour="gray50")  
      if(opt.DV.point==TRUE)
      {  P.temp<-P.temp+geom_point(,color="grey30",size=2,alpha=0.5) 
         DV.point <- data.frame(X=orig.data[,X.name],Y=orig.data[,Y.name])
@@ -136,8 +136,8 @@ asVPC.distanceW<-function(orig.data,sim.data,n.timebin,n.sim,n.hist,
     DV.quant<-data.frame(X=rep(orig.Q$mid,length(q.list)),
                          G=factor(rep(paste("Q",round(q.list*100),"th",sep=""),each=nrow(orig.Q))),
                          Y=unlist(orig.Q[,-1]))
-    (P.temp<-P.temp+geom_line(data = DV.quant[DV.quant$G!="Q50th",],aes(x=X,y=Y,group=G),linetype=2,size=1,color="blue")+
-       geom_line(data = DV.quant[DV.quant$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="blue") )
+    (P.temp<-P.temp+geom_line(data = DV.quant[DV.quant$G!="Q50th",],aes(x=X,y=Y,group=G),linetype=2,size=1,color="black")+
+       geom_line(data = DV.quant[DV.quant$G=="Q50th",],aes(x=X,y=Y,group=G),linetype=1,size=1,color="black") )
     colnames(orig.Q)<-c("X.mid",paste("Q",round(q.list*100),"th",sep="") ) 
     if(plot.flag)
     {  P.temp
