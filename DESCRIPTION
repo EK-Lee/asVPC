@@ -2,7 +2,7 @@ Package: asVPC
 Type: Package
 Title: Average Shifted Visual Predictive Checks
 Version: 1.0.0
-Date: 2015-5-5
+Date: 2015-5-7
 Author: Eun-Kyung Lee
 Maintainer: Eun-Kyung Lee <lee.eunk@gmail.com>
 Suggests: Hmisc

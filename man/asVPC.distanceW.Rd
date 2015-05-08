@@ -51,7 +51,7 @@ percentiles of simulated data with corresponding confidence interval
 \examples{
 data(origdata)
 data(simdata)
-asVPC.distanceW(origdata,simdata,n.timebin=10, n.sim=50,n.hist=3)
+asVPC.distanceW(origdata,simdata,n.timebin=10, n.sim=100,n.hist=3)
 }
 \author{
 Eun-Kyung Lee \email{lee.eunk@gmail.com}

@@ -55,7 +55,7 @@ percentiles of simulated data with corresponding confidence interval
 \examples{
 data(origdata)
 data(simdata)
-VPC.graph(origdata,simdata,10,50,Y.max=15)
+VPC.graph(origdata,simdata,10,100)
 }
 \author{
 Eun-Kyung Lee \email{lee.eunk@gmail.com}
