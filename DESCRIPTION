@@ -1,12 +1,15 @@
 Package: asVPC
 Type: Package
 Title: Average Shifted Visual Predictive Checks
-Version: 1.0.0
-Date: 2015-5-7
+Version: 1.0.2
+Date: 2015-5-8
 Author: Eun-Kyung Lee
 Maintainer: Eun-Kyung Lee <lee.eunk@gmail.com>
 Suggests: Hmisc
 Imports: ggplot2,plyr
-Description: Validation method for the nonlinear mixed effect model. Visual
-    predictive checks with average shifted.
+Description: The visual predictive checks are well-known method to validate the 
+             nonlinear mixed effect model, especially in pharmacometrics area. 
+             The average shifted visual predictive checks are the newly 
+             developed method of Visual predictive checks combined with 
+             the idea of the average shifted histogram.
 License: GPL (>= 2)
