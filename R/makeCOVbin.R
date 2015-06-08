@@ -1,16 +1,15 @@
 #' make the bins with equal number of observations  
 #' or using user-defined breaks
 #'
+#' @title Bin-maker
 #' @param COV.data numeric vector that need to make bins
 #' @param N.covbin the number of bins
 #' @param breaks.data user-defined breaks
 #' @return information of the binning with summary
 #' @export
-#' @author Eun-Kyung Lee \email{lee.eunk@@gmail.com}
 #' @examples
 #' data(origdata)
 #' makeCOVbin(origdata$TIME,7)
-
 
 makeCOVbin<-function(COV.data,N.covbin=NULL,breaks.data=NULL){   
    find.LU<-function(bin.ID){

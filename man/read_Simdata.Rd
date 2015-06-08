@@ -2,8 +2,7 @@
 % Please edit documentation in R/read_Simdata.R
 \name{read_Simdata}
 \alias{read_Simdata}
-\title{calculate percentiles of original data using bin-related weight
-percentiles of simulated data with corresponding confidence interval}
+\title{read the simulated data file generated from NONMEM}
 \usage{
 read_Simdata(sim.file.name, data.n, sim.n, name.DV)
 }
@@ -20,8 +19,7 @@ read_Simdata(sim.file.name, data.n, sim.n, name.DV)
 data.n * sim.n matrix with simulated data
 }
 \description{
-calculate percentiles of original data using bin-related weight
-percentiles of simulated data with corresponding confidence interval
+read the simulated data file generated from NONMEM
 }
 \author{
 Eun-Kyung Lee \email{lee.eunk@gmail.com}

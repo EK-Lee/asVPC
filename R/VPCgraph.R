@@ -1,7 +1,7 @@
-#' calculate percentiles of original data using bin-related weight 
-#' percentiles of simulated data with corresponding confidence interval
+#' draw the original visual predictive check plot
 #' 
 #' @import ggplot2 plyr
+#' @title Visual predictive checks
 #' @param orig.data NONMEM data 
 #' @param sim.data simulated data from NONMEM
 #' @param N.timebin number of time bin
@@ -14,15 +14,13 @@
 #' @param opt.DV.point option for drawing data points
 #' @param opt.DV.quantile.line option for drawing quantiles of the original data
 #' @param opt.SIM.quantile.line option for drawing quantiles of simulated data
-#' @param opt.SIM.quantile.CI.area opeions for drawing confidence area of 
-#' quantiles for simulated data
+#' @param opt.SIM.quantile.CI.area option for drawing confidence area of 
+#'                                  quantiles for simulated data
 #' @param Y.min minimum of y axis in VPC plot
 #' @param Y.max maximum of y axis in VPC plot
-#' @param plot.flag TRUE: drawing plot / FALSE: generate data for drawing plot
+#' @param plot.flag draw plot if TRUE; generate data for drawing plot if FALSE
 #' @return plot or the values to draw plot
 #' @export
-#' @references new paper...
-#' @author Eun-Kyung Lee \email{lee.eunk@@gmail.com}
 #' @examples
 #' data(origdata)
 #' data(simdata)

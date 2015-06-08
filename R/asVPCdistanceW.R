@@ -1,6 +1,8 @@
 #' calculate percentiles of original data using distance-related weight 
 #' percentiles of simulated data with corresponding confidence interval
+#' and draw the asVPC plot
 #' 
+#' @title asVPC with distance-related weight
 #' @param orig.data the original data for model fitting
 #' @param sim.data the simulated data from NONMEM
 #' @param n.timebin the number of bin in X axis
@@ -15,12 +17,10 @@
 #' @param Y.min minimum of Y range in the plot
 #' @param Y.max maximum of Y range in the plot
 #' @param only.med option to use only median 
-#' @param plot.flag TRUE: drawing plot / FALSE: generate data for drawing plot
+#' @param plot.flag draw plot if TRUE; generate data for drawing plot if FALSE
 #' @return plot or the values to draw plot
 #' @export
 #' @seealso \code{\link{asVPC.binW}}
-#' @references new paper...
-#' @author Eun-Kyung Lee \email{lee.eunk@@gmail.com}
 #' @examples
 #' data(origdata)
 #' data(simdata)

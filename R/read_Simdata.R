@@ -1,15 +1,12 @@
-#' calculate percentiles of original data using bin-related weight 
-#' percentiles of simulated data with corresponding confidence interval
+#' read the simulated data file generated from NONMEM
 #'
+#' @title Read NONMEM simulation data
 #' @param sim.file.name file name of simulation, generated from NONMEM with 'NOAPPEND ONEHEAD' options in TABLE statement
 #' @param data.n number of observations in the original data 
 #' @param sim.n number of simulation
 #' @param name.DV name of dependent variable in simulated data file
 #' @return data.n * sim.n matrix with simulated data
 #' @export
-#' @seealso \code{\link{asVPC.distanceW}}
-#' @references new paper...
-#' @author Eun-Kyung Lee \email{lee.eunk@@gmail.com}
 
 read_Simdata<-function(sim.file.name,data.n,sim.n,name.DV){ 
    data.n<-data.n+2

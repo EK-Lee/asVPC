@@ -2,8 +2,7 @@
 % Please edit documentation in R/VPCgraph.R
 \name{VPC.graph}
 \alias{VPC.graph}
-\title{calculate percentiles of original data using bin-related weight
-percentiles of simulated data with corresponding confidence interval}
+\title{draw the original visual predictive check plot}
 \usage{
 VPC.graph(orig.data, sim.data, N.timebin, N.sim, q.list = c(0.05, 0.5, 0.95),
   alpha = 0.05, X.name = "TIME", Y.name = "DV", main.title = NULL,
@@ -49,8 +48,7 @@ quantiles for simulated data}
 plot or the values to draw plot
 }
 \description{
-calculate percentiles of original data using bin-related weight
-percentiles of simulated data with corresponding confidence interval
+draw the original visual predictive check plot
 }
 \examples{
 data(origdata)

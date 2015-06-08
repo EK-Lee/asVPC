@@ -1,10 +1,17 @@
 #' calculate percentiles of original data using bin-related weight 
-#' percentiles of simulated data with corresponding confidence interval
+#' percentiles of simulated data with corresponding confidence interval 
+#' and draw the asVPC plot
 #' 
 #' @import ggplot2  plyr
+#' @title asVPC with bin-related weight
+#' @usage asVPC.binW(orig.data,sim.data,n.timebin,n.sim,n.hist,
+#'                   q.list=c(0.05,0.5,0.95),conf.level=0.95,
+#'                   X.name="TIME",Y.name="DV",opt.DV.point=FALSE,
+#'                   weight.flag=FALSE,Y.min=NULL,Y.max=NULL,
+#'                   only.med=FALSE,plot.flag=TRUE)
 #' @param orig.data the original data for model fitting
-#' @param sim.data the simulated data from NONMEM
-#' @param n.timebin the number of bin in X axis
+#' @param sim.data the simulated data 
+#' @param n.timebin the number of bin of X axis
 #' @param n.sim the number of simulation in the simulated data
 #' @param n.hist the number of shifted 
 #' @param q.list numeric vector of probabilities with values in [0,1]
@@ -13,15 +20,13 @@
 #' @param Y.name the name of Y variable in the original scatter plot
 #' @param opt.DV.point option to put data point in the plot
 #' @param weight.flag option to use weight in average shifted calculation 
-#' @param Y.min minimum of Y range in the plot
-#' @param Y.max maximum of Y range in the plot
-#' @param only.med option to use only median 
-#' @param plot.flag TRUE: drawing plot / FALSE: generate data for drawing plot
+#' @param Y.min minimum of Y axis in the plot
+#' @param Y.max maximum of Y axis in the plot
+#' @param only.med use only median if TRUE
+#' @param plot.flag draw plot if TRUE; generate data for drawing plot if FALSE
 #' @return plot or the values to draw plot
 #' @export
 #' @seealso \code{\link{asVPC.distanceW}}
-#' @references new paper...
-#' @author Eun-Kyung Lee \email{lee.eunk@@gmail.com}
 #' @examples
 #' data(origdata)
 #' data(simdata)

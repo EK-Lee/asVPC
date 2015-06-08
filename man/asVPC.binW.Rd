@@ -3,7 +3,8 @@
 \name{asVPC.binW}
 \alias{asVPC.binW}
 \title{calculate percentiles of original data using bin-related weight
-percentiles of simulated data with corresponding confidence interval}
+percentiles of simulated data with corresponding confidence interval
+and draw the asVPC plot}
 \usage{
 asVPC.binW(orig.data, sim.data, n.timebin, n.sim, n.hist, q.list = c(0.05,
   0.5, 0.95), conf.level = 0.95, X.name = "TIME", Y.name = "DV",
@@ -47,6 +48,7 @@ plot or the values to draw plot
 \description{
 calculate percentiles of original data using bin-related weight
 percentiles of simulated data with corresponding confidence interval
+and draw the asVPC plot
 }
 \examples{
 data(origdata)
