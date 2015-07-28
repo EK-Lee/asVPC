@@ -28,10 +28,10 @@ makeCOVbin<-function(COV.data,N.covbin=NULL,breaks.data=NULL){
    if(!is.null(breaks.data)){
       range.temp<-range(COV.data)
       if(min(breaks.data)>range.temp[1]){
-         breaks.data[1]<-range.temp[1]-(range.temp[2]-range.temp[1])*0.1
+         breaks.data[1]<-range.temp[1]-(range.temp[2]-range.temp[1])*0.5
       } else if(max(breaks.data)<range.temp[2]){
          breaks.data[length(breaks.data)]<-range.temp[2]+
-                                         (range.temp[2]-range.temp[1])*0.1      
+                                         (range.temp[2]-range.temp[1])*0.5      
       }
       cut.temp<-cut(COV.data, breaks=breaks.data) 
       tab<-ddply(data.temp,.(cut.temp), summarize,
@@ -53,8 +53,10 @@ makeCOVbin<-function(COV.data,N.covbin=NULL,breaks.data=NULL){
                       med.COV=round(median(COV.data, na.rm=T),2),.drop=FALSE)
       } else{
          cut.temp.id<-as.numeric(names(table(COV.data)))
-         cut.temp.id[1]<-cut.temp.id[1]-0.1
-         cut.temp.id[length(cut.temp.id)]<-cut.temp.id[length(cut.temp.id)]+0.1
+         temp.diff<-diff(cut.temp.id)/2
+         cut.temp.id<-c(cut.temp.id[1]-temp.diff[1],
+                        cut.temp.id[-length(cut.temp.id)]+temp.diff,
+                        cut.temp.id[length(cut.temp.id)]+temp.diff[length(temp.diff)])
          cut.temp<-cut(COV.data,cut.temp.id)     
          tab<-ddply(data.temp,.(cut.temp),summarize,
                    med.COV=round(median(COV.data, na.rm=T),2),.drop=FALSE)      
@@ -62,7 +64,8 @@ makeCOVbin<-function(COV.data,N.covbin=NULL,breaks.data=NULL){
    } 
    LU.temp<-find.LU(tab[,1])
    colnames(LU.temp)<-c("lower.COV","upper.COV")
-   tab<-data.frame(tab,n.bin=c(table(cut.temp)),LU.temp)
+   mid.LU<-apply(LU.temp,1,mean)
+   tab<-data.frame(tab,n.bin=c(table(cut.temp)),LU.temp,mid.LU=mid.LU)
    return(list(COV.bin=cut.temp,COV.bin.summary=tab))
 }
 
