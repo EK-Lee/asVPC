@@ -1,6 +1,7 @@
 #' calculate percentiles of original data using bin-related weight 
 #' percentiles of simulated data with corresponding confidence interval 
 #' and draw the asVPC plot
+#' test
 #' 
 #' @import ggplot2  plyr
 #' @title asVPC with bin-related weight
